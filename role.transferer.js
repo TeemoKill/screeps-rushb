@@ -1,6 +1,6 @@
 const findMaxContainer = require('helper.find_max_container');
 
-var roleTransfer = {
+var roleTransferer = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -62,4 +62,4 @@ var roleTransfer = {
 	}
 };
 
-module.exports = roleTransfer;
+module.exports = roleTransferer;

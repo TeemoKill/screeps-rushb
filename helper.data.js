@@ -14,7 +14,6 @@ module.exports = function () {
     var droppedEnergy = [];
     var mySpawns = [];
 
-    var cnt = 0;
     Object.values(Game.creeps).forEach(creep => {
         if (creep.memory.role != undefined) {
             if (myCreeps[creep.memory.role] == undefined) {
@@ -23,7 +22,6 @@ module.exports = function () {
                 myCreeps[creep.memory.role] += creep;
             }
         }
-        cnt ++;
     });
 
     for (var i in Game.structures) {
@@ -89,10 +87,6 @@ module.exports = function () {
             }
         })
 
-    }
-
-    if (Game.time % 10 == 0)  {
-        console.log('creeps:' + cnt);
     }
 
     return {

@@ -1,14 +1,16 @@
 const roleHarvester = require('role.harvester');
-const roleTransfer = require('role.transfer');
+const roleTransferer = require('role.transferer');
 const roleUpgrader = require('role.upgrader');
 const roleConstructor = require('role.constructor');
+const { isNull, isUndefined } = require('lodash');
 
 module.exports = function (creep) {
     if (creep.ticksToLive < 300) {
-        creep.say('Help Help Help');
+        // creep.say('Help Help Help');
+        creep.say('need renew');
         creep.memory.renew = true;
     }
-    else if (creep.ticksToLive >= 1400) {
+    else if (creep.ticksToLive > 1400) {
         creep.memory.renew = false;
     }
 
@@ -22,12 +24,29 @@ module.exports = function (creep) {
 
     if (creep.memory.renew) {
         var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
-        creep.moveTo(spawn);
-        if (!spawn.spawning) {
+        // console.log("Creep: " + creep.memory["Name"] + "Spawn: " + spawn);
+        if (isUndefined(spawn) || isNull(spawn)) {
+            // can not find path to spawn, 
+            // may indicates the creep is stuck by others
+            // then just stay and wait
+            return;
+        }
+        // console.log("Spawn resource: " + spawn.store[RESOURCE_ENERGY]);
+        if (spawn.store[RESOURCE_ENERGY] > 30) {
+            creep.moveTo(spawn);
+            // if (isNull(spawn.Spawning)) {
+            //     spawn.renewCreep(creep);
+            //     return
+            // }
             spawn.renewCreep(creep);
+            return;
+        }
+        else {
+            creep.say('spawn no energy');
         }
     }
-    else if (creep.memory.hurt) {
+        
+    if (creep.memory.hurt) {
         var tower = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, 
             {
                 filter: (s) => {
@@ -36,19 +55,20 @@ module.exports = function (creep) {
             }
         );
         creep.moveTo(tower);
+        return
     }
-    else {
-        if (creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
-        }
-        else if (creep.memory.role == 'transfer') {
-            roleTransfer.run(creep);
-        }
-        else if (creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        }
-        else if (creep.memory.role == 'constructor') {
-            roleConstructor.run(creep);
-        }
+
+    // do the corresponding job
+    if (creep.memory.role == 'harvester') {
+        roleHarvester.run(creep);
+    }
+    else if (creep.memory.role == 'transferer') {
+        roleTransferer.run(creep);
+    }
+    else if (creep.memory.role == 'upgrader') {
+        roleUpgrader.run(creep);
+    }
+    else if (creep.memory.role == 'constructor') {
+        roleConstructor.run(creep);
     }
 }

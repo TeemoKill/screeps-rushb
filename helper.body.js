@@ -3,16 +3,20 @@ module.exports = function (role) {
     var body;
     switch (role) {
         case 'harvester':
-            body = makeBody('WWWWWWCM');
+            body = makeBody('WWWWWWWCM');
+            // body = makeBody('WWWCM');
             break;
-        case 'transfer':
-            body = makeBody('WCCCCCMMM');
+        case 'transferer':
+            body = makeBody('WCCCCCCCCMMMMMM');
+            // body = makeBody('WCCCCCMMM');
             break;
         case 'upgrader':
             body = makeBody('WWWCCCCCMMMM'); 
+            // body = makeBody('WWCCCCMMM'); 
             break;
         case 'constructor':
             body = makeBody('WWWWCCCCMMMM');
+            // body = makeBody('WWCCCMMM');
             break;
         default:
             console.log('helper.body: role not exist!');
