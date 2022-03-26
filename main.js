@@ -11,16 +11,17 @@ var sn = 30;
 module.exports.loop = function () {
     const DATA = data();
     
-    const harvesters = _.filter(Game.creeps, {memory: {role: "harvester"}});
-    const upgraders = _.filter(Game.creeps, {memory: {role: "upgrader"}});
-    const constructors = _.filter(Game.creeps, {memory: {role: "constructor"}});
-    const transferers = _.filter(Game.creeps, {memory: {role: "transferer"}});
+    const harvesters = _.filter(Game.creeps, {memory: {role: global.types.harvester}});
+    const upgraders = _.filter(Game.creeps, {memory: {role: global.types.upgrader}});
+    const constructors = _.filter(Game.creeps, {memory: {role: global.types.constructor}});
+    const transferers = _.filter(Game.creeps, {memory: {role: global.types.transferer}});
 
     const towers = _.filter(Game.structures, {structureType: STRUCTURE_TOWER});
     
     if (Game.time%20 == 0) {
         console.log("creeps: " + Object.values(Game.creeps).length);
-        console.log("harvesters: " + harvesters.length + 
+        console.log(
+            "harvesters: " + harvesters.length + 
             ", transferers: " + transferers.length + 
             ", upgraders: " + upgraders.length + 
             ", constructors: " + constructors.length
@@ -28,10 +29,16 @@ module.exports.loop = function () {
     }
 
     Object.values(Game.rooms).forEach(room => {
-        // if (room.energyAvailable == room.energyCapacityAvailable) {
-        // console.log("Energy Available: " + room.energyAvailable)
-        var lowestCreepEnergy = 750;
-        if (room.energyAvailable > lowestCreepEnergy) {
+        /*
+        console.log(
+            "Room: " + room.name + 
+            ", Energy Available: " + room.energyAvailable +
+            ", Energy Capacity Available: " + room.energyCapacityAvailable
+        )
+        */
+
+        // only try to create creep if room energy is full
+        if (room.energyAvailable == room.energyCapacityAvailable) {
 
             const spawns = DATA.sp[room.name];
             spawns.forEach(spawn => {
@@ -41,29 +48,30 @@ module.exports.loop = function () {
                 // console.log('creepbody: ' + creepBody);
                 
                 if (harvesters.length < 1) {
-                    createCreep(spawn, 'harvester');
+                    createCreep(spawn, global.types.harvester);
                 }
                 else if (constructors.length < 1) {
-                    createCreep(spawn, 'constructor');
+                    createCreep(spawn, global.types.constructor);
                 }
                 else if (transferers.length < 1) {
-                    createCreep(spawn, 'transferer');
+                    createCreep(spawn, global.types.transferer);
                 }
                 else if (upgraders.length < 1) {
-                    createCreep(spawn, 'upgrader');
+                    createCreep(spawn, global.types.upgrader);
                 }
                 else if (harvesters.length < 8) {
-                    createCreep(spawn, 'harvester');
+                    createCreep(spawn, global.types.harvester);
                 }
                 else if (transferers.length < 4) {
-                    createCreep(spawn, 'transferer');
+                    createCreep(spawn, global.types.transferer);
                 }
                 else if (upgraders.length < 2) {
-                    createCreep(spawn, 'upgrader');
+                    createCreep(spawn, global.types.upgrader);
                 }
                 else if (constructors.length < 6) {
-                    createCreep(spawn, 'constructor');
+                    createCreep(spawn, global.types.constructor);
                 }
+
             }); 
         }
     });

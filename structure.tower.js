@@ -1,7 +1,5 @@
 
 
-
-
 module.exports = {
     work: function(tower) {
         var enemy = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);

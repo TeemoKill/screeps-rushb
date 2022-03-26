@@ -4,6 +4,7 @@ var roleConstructor = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+		// creep checks whether need recharging
 	    if (!creep.memory.recharge && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.recharge = true;
             creep.say('🔄 recharge');
