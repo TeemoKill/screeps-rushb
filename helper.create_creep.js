@@ -12,9 +12,9 @@ module.exports = function (spawn, role) {
         var creepBody = body(role, spawn.store.getCapacity(RESOURCE_ENERGY));
         console.log(creepBody);
         var sn = Math.ceil(Math.random() * 10000);
-        spawn.spawnCreep(creepBody, role + sn, {
+        spawn.spawnCreep(creepBody, global.roleName[role] + sn, {
             memory: {role: role,
-                recharge: true}
+                recharge: 1}
         });
     }
 }

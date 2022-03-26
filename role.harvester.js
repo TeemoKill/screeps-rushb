@@ -1,3 +1,5 @@
+const creepHarvest = require('creeplife.harvest');
+
 var roleHarvester = {
 
     /** @param {Creep} creep **/
@@ -11,24 +13,31 @@ var roleHarvester = {
         }
         
 	    if (creep.memory.recharge) {
-	        var target = creep.pos.findClosestByPath(FIND_SOURCES, {
-	            filter: (source) => {
-	                return source.energy > 0;
-	            }
-	        });
-            if (target) {
-                if (target.energy > 0) {
-                    if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
-                    }
-                    creep.say("🔄 mine");
-                    return;
-                }
-                else {
-                    // continue to store holding resource
-                }
-            }
+            creepHarvest(creep);
         }
+
+        // cold start stage, if can not find any built container, harvesters lend a hand on building
+        var rechargePort = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            filter: (s) => {
+                return s.structureType == STRUCTURE_CONTAINER;
+            }
+        }); 
+        if (!rechargePort) {
+            // if no container, harvester help to build
+            var constrSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
+                filter: (s) => {
+                    return s.structureType == STRUCTURE_CONTAINER;
+                }
+            });
+            if (constrSite) {
+                // find a constuct site, help build it
+                if(creep.build(constrSite) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(constrSite, {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+                return
+            } // if no construct site found, harvester go back to store energy
+        }
+
         var destination = creep.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: (structure) => {
                 return (structure.structureType == STRUCTURE_CONTAINER) &&

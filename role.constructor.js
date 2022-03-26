@@ -1,4 +1,6 @@
 const findMinStructure = require('helper.find_min_structure');
+const creepRecharge = require('creeplife.recharge');
+const creepHarvest = require('creeplife.harvest');
 
 var roleConstructor = {
 
@@ -14,50 +16,14 @@ var roleConstructor = {
 	    }
 
 	    if (creep.memory.recharge) {
-			var target = creep.pos.findClosestByPath(FIND_STRUCTURES, 
-				{
-					filter: (structure) => {
-						return (structure.structureType == STRUCTURE_CONTAINER) &&
-							structure.store[RESOURCE_ENERGY] > 0;
-					}
-				}
-			);
-			// if (target) {
-			//     creep.memory.mode = 'withdraw';
-			// }
-			// else {
-			//     creep.memory.mode = 'harvest';
-			// 	target = creep.pos.findClosestByPath(FIND_SOURCES, {
-    	    //         filter: (source) => {
-    	    //             return source.energy > 0;
-    	    //         }
-	        //     });
-			// }
-            if (target) {
-                // if (creep.memory.mode == 'withdraw') {
-                    if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
-                    // }
-                }
-                // else if (creep.memory.mode == 'harvest') {
-                //     if (creep.harvest(target) == ERR_NOT_IN_RANGE) {
-                //         creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
-                //     }
-                // }
-            }
-			else {
-				// currently no energy resource,
-				// find a container and go to wait
-				target = creep.pos.findClosestByPath(FIND_STRUCTURES, 
-					{
-						filter: (structure) => {
-							return (structure.structureType == STRUCTURE_CONTAINER);
-						}
-					}
-				);
-				if (target) {
-					creep.moveTo(target);
-				}
+			switch (creepRecharge(creep)) {
+				// no error, just return
+				case undefined:
+					return
+				// creep can not reach any container to recharge
+				case ERR_NOT_IN_RANGE:
+					// quite urgenet, let the constructor creep go to harvest by itself first
+					creepHarvest(creep);
 			}
 	    }
 	    else {
