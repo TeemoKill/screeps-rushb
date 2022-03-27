@@ -23,36 +23,102 @@ module.exports = function(spawn) {
         " spawn: " + spawn.name +
         ", creep: " + creep.name
     )
-    callCreepToRenew(spawn, creep);
+    spawn.callCreepToRenew(creep);
 
     if (creep.ticksToLive > 1400) {
-        removeCreepFromRenewList(spawn, creep);
+        spawn.removeCreepFromRenewList(creep);
     }
 
 }
 
-/** @param {StructureSpawn} renewSite @param {Creep} creep */
-function callCreepToRenew(renewSite, creep) {
+StructureSpawn.prototype.processRenewList = function() {
     utils.debug(
-        "[spawn.renew_creep:callCreepToRenew] " +
-        "renew site: " + renewSite.name +
-        ", call renew creep: " + creep.name
+        "[spawn.processRenewList] " +
+        "spawn: " + this.name
     )
-    creep.memory.renew = true;
-    return undefined
+
+    if (!this.memory.renewList || this.memory.renewList.length == 0) {
+        return undefined;
+    }
+
+    var creep = Game.getObjectById(this.memory.renewList[0]);
+    if (!creep) {
+        this.memory.renewList.shift();
+        return ERR_INVALID_TARGET;
+    }
+
+    utils.debug(
+        "[spawn.processRenewList] " +
+        "spawn: " + this.name +
+        ", creep: " + creep.name
+    )
+    this.callCreepToRenew(creep);
+
+    if (creep.ticksToLive > 1400) {
+        this.removeCreepFromRenewList(creep);
+    }
+
+    return undefined;
 }
 
-/** @param {StructureSpawn} renewSite @param {Creep} creep */
-removeCreepFromRenewList = function(renewSite, creep) {
+/**
+ * @param {Creep} creep
+ */
+StructureSpawn.prototype.addCreepToRenewList = function(creep) {
     utils.debug(
-        "[spawn.renew_creep:removeCreepFromRenewList] " +
-        "renew site: " + renewSite.name +
+        "[spawn.addCreepToRenewList] " +
+        "spawn: " + this.name +
+        ", add creep: " + creep.name
+    )
+
+    if (!this.memory.renewList) {
+        this.memory.renewList = [];
+    }
+    if (this.memory.renewList.length > 1) {
+        return ERR_FULL;
+    }
+
+    // add creep id to renew list
+    if (this.memory.renewList.indexOf(creep.id) == -1) {
+        this.memory.renewList.push(creep.id);
+        utils.info(
+            "[spawn.addCreepToRenewList] " +
+            "spawn: " + this.name +
+            ", added creep id: " + creep.id +
+            ", creep: " + creep.name
+        )
+    }
+
+    return undefined;
+}
+
+/**
+ * @param {Creep} creep
+ */
+StructureSpawn.prototype.callCreepToRenew = function(creep) {
+    utils.debug(
+        "[spawn.callCreepToRenew] " +
+        "spawn: " + this.name +
+        ", call renew creep: " + creep.name
+    )
+    creep.memory.renewSiteID = this.id;
+    creep.memory.renew = true;
+    return undefined;
+}
+
+/**
+ * @param {Creep} creep
+ */
+StructureSpawn.prototype.removeCreepFromRenewList = function(creep) {
+    utils.debug(
+        "[spawn.removeCreepFromRenewList] " +
+        "spawn: " + this.name +
         ", remove creep: " + creep.name
     )
     creep.memory.renew = 0;
     creep.memory.renewSiteID = null;
 
-    renewSite.memory.renewList.shift();
+    this.memory.renewList.shift();
 
-    return undefined
+    return undefined;
 }

@@ -24,8 +24,6 @@ global.bodyPartCost = {
     CLAIM: 600,
 }
 
-
-
 /** @param {Number} role @param {Number} availableEnergy */
 module.exports = function (role, availableEnergy) {
     var body;

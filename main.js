@@ -1,23 +1,26 @@
 
+require('spawn.renew_creep');
+
+
 const data = require('helper.data');
 
 const createCreep = require('helper.create_creep');
 const creepGoToWork = require('helper.creep_go_to_work');
 
-const spawnRenewCreep = require('spawn.renew_creep');
-
 const structureTower = require('structure.tower');
-const utils = require('./utils');
 
-var sn = 30;
+const utils = require('utils');
 
-global.data = null;
-global.creeps = null;
-global.debug = false;
+g = global;
+g.data = null;
+g.creeps = null;
+g.debug = false;
+
+g.orch = require('orch.taskOrchestrator');
 
 module.exports.loop = function () {
     const DATA = data();
-    global.data = DATA;
+    g.data = DATA;
 
     if (Game.time%500 == 0) {
         recycleDeadCreepMemory();
@@ -28,7 +31,7 @@ module.exports.loop = function () {
     const constructors = _.filter(Game.creeps, {memory: {role: global.types.constructor}});
     const transferers = _.filter(Game.creeps, {memory: {role: global.types.transferer}});
 
-    global.creeps = {
+    g.creeps = {
         harvesters: harvesters,
         upgraders: upgraders,
         constructors: constructors,
@@ -66,34 +69,34 @@ scheduleSpawnTasks = function() {
             if (Game.time%10 == 0) {
                 // only try to create creep if room energy is full
                 if (room.energyAvailable == room.energyCapacityAvailable) {
-                    if (global.creeps.harvesters.length < 1) {
-                        createCreep(spawn, global.types.harvester);
+                    if (g.creeps.harvesters.length < 1) {
+                        createCreep(spawn, g.types.harvester);
                     }
-                    else if (global.creeps.constructors.length < 1) {
-                        createCreep(spawn, global.types.constructor);
+                    else if (g.creeps.constructors.length < 1) {
+                        createCreep(spawn, g.types.constructor);
                     }
-                    else if (global.creeps.transferers.length < 1) {
-                        createCreep(spawn, global.types.transferer);
+                    else if (g.creeps.transferers.length < 1) {
+                        createCreep(spawn, g.types.transferer);
                     }
-                    else if (global.creeps.upgraders.length < 1) {
-                        createCreep(spawn, global.types.upgrader);
+                    else if (g.creeps.upgraders.length < 1) {
+                        createCreep(spawn, g.types.upgrader);
                     }
-                    else if (global.creeps.harvesters.length < 8) {
-                        createCreep(spawn, global.types.harvester);
+                    else if (g.creeps.harvesters.length < 5) {
+                        createCreep(spawn, g.types.harvester);
                     }
-                    else if (global.creeps.transferers.length < 4) {
-                        createCreep(spawn, global.types.transferer);
+                    else if (g.creeps.transferers.length < 3) {
+                        createCreep(spawn, g.types.transferer);
                     }
-                    else if (global.creeps.upgraders.length < 5) {
-                        createCreep(spawn, global.types.upgrader);
+                    else if (g.creeps.upgraders.length < 3) {
+                        createCreep(spawn, g.types.upgrader);
                     }
-                    else if (global.creeps.constructors.length < 6) {
-                        createCreep(spawn, global.types.constructor);
+                    else if (g.creeps.constructors.length < 3) {
+                        createCreep(spawn, g.types.constructor);
                     }
                 }
             } 
 
-            spawnRenewCreep(spawn);
+            spawn.processRenewList();
         });
     });
 }

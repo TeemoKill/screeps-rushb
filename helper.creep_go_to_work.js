@@ -1,9 +1,10 @@
+
+require('creeplife.require_renew');
+
 const roleHarvester = require('role.harvester');
 const roleTransferer = require('role.transferer');
 const roleUpgrader = require('role.upgrader');
 const roleConstructor = require('role.constructor');
-
-const globalAddToRenewList = require('global.add_to_renew_list');
 
 const utils = require('utils');
 
@@ -14,7 +15,8 @@ module.exports = function (creep) {
     if (creep.ticksToLive < 300) {
         // creep.say('Help Help Help');
         creep.say('need renew');
-        globalAddToRenewList(creep);
+        // globalAddToRenewList(creep);
+        creep.requireRenew();
     }
 
     if (creep.hits < creep.hitsMax) {
