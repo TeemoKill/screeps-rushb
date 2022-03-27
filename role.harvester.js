@@ -1,4 +1,6 @@
-const creepHarvest = require('creeplife.harvest');
+
+require('creeplife.harvest');
+require('creeplife.store_energy')
 
 var roleHarvester = {
 
@@ -13,7 +15,7 @@ var roleHarvester = {
         }
         
 	    if (creep.memory.recharge) {
-            return creepHarvest(creep);
+            return creep.creeplifeHarvest();
         }
 
         // cold start stage, if can not find any built container, harvesters lend a hand on building
@@ -38,32 +40,16 @@ var roleHarvester = {
             } // if no construct site found, harvester go back to store energy
         }
 
-        var destination = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-            filter: (structure) => {
-                return (structure.structureType == STRUCTURE_CONTAINER) &&
-                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-            }
-        });
-        if (!destination) {
-            destination = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                }
-            });
+        if (creep.creeplifeStoreEnergy(global.filters.conteinerNotFull) == OK) {
+            return undefined;
+        } 
+
+        if (creep.creeplifeStoreEnergy(global.filters.extentionOrSpawnNotFull) == OK) {
+            return undefined;
         }
-        if (destination) {
-            if (creep.transfer(destination, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(destination, {visualizePathStyle: {stroke: '#ffffff'}});
-            }
-            creep.say("⚡ store");
-            return;
-        }
-        else {
-            for (const spawnName in Game.spawns) {
-                creep.moveTo(Game.spawns[spawnName], {visualizePathStyle: {stroke: '#00ff00'}});
-            }
+        
+        for (const spawnName in Game.spawns) {
+            creep.moveTo(Game.spawns[spawnName], {visualizePathStyle: {stroke: '#00ff00'}});
         }
     }
 };

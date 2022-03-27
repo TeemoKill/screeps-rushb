@@ -1,7 +1,7 @@
 
-module.exports = function(creep) {
+Creep.prototype.creeplifeHarvest = function() {
     // find closest energy source
-    var energySource = creep.pos.findClosestByPath(FIND_SOURCES, {
+    var energySource = this.pos.findClosestByPath(FIND_SOURCES, {
         filter: (s) => {
             // filter non-empty sources
             return s.energy > 0;
@@ -10,10 +10,10 @@ module.exports = function(creep) {
     
     // if can find any energy source, move to harvest
     if (energySource) {
-        if (creep.harvest(energySource) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(energySource, {visualizePathStyle: {stroke: '#ffaa00'}});
+        if (this.harvest(energySource) == ERR_NOT_IN_RANGE) {
+            this.moveTo(energySource, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
-        creep.say("🔄 mine");
+        this.say("🔄 mine");
         return;
     }
 }

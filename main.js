@@ -1,12 +1,12 @@
 
+require('creeplife.go_to_work');
+require('global.filters');
 require('spawn.renew_creep');
-
 require('structure.tower');
 
 const data = require('helper.data');
 
 const createCreep = require('helper.create_creep');
-const creepGoToWork = require('helper.creep_go_to_work');
 
 const utils = require('utils');
 
@@ -16,6 +16,8 @@ g.creeps = null;
 g.debug = false;
 
 g.orch = require('orch.taskOrchestrator');
+
+utils.info("[main] initialization done");
 
 module.exports.loop = function () {
     const DATA = data();
@@ -52,7 +54,7 @@ module.exports.loop = function () {
     scheduleSpawnTasks();
 
     Object.values(Game.creeps).forEach(creep => {
-        creepGoToWork(creep);
+        creep.goToWork();
     });
 
     towers.forEach(tower => {

@@ -1,7 +1,8 @@
 
+require('creeplife.harvest');
+
 const findMinStructure = require('helper.find_min_structure');
 const creepRecharge = require('creeplife.recharge');
-const creepHarvest = require('creeplife.harvest');
 
 var roleConstructor = {
 
@@ -24,7 +25,7 @@ var roleConstructor = {
 				// creep can not reach any container to recharge
 				case ERR_NOT_IN_RANGE:
 					// quite urgenet, let the constructor creep go to harvest by itself first
-					return creepHarvest(creep);
+					return creep.creeplifeHarvest();
 				default:
 					return ERR_NOT_ENOUGH_ENERGY;
 			}

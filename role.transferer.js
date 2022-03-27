@@ -1,3 +1,6 @@
+
+require('creeplife.transfer')
+
 const findMaxContainer = require('helper.find_max_container');
 
 var roleTransferer = {
@@ -30,34 +33,7 @@ var roleTransferer = {
             }
         }
         else {
-            var destination = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN) &&
-                        structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                }
-            });
-            if (!destination) {
-                destination = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return structure.structureType == STRUCTURE_TOWER &&
-                            structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-                    }
-                });
-            }
-            if (!destination) {
-                destination = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (structure.structureType == STRUCTURE_EXTENSION ||
-                            structure.structureType == STRUCTURE_SPAWN);
-                    }
-                });
-            }
-            if (destination) {
-                if (creep.transfer(destination, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(destination, {visualizePathStyle: {stroke: '#ffffff'}});
-                }
-            }
+            creep.creeplifeTransfer();
         }
 	}
 };

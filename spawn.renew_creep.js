@@ -1,36 +1,6 @@
 
 const utils = require('utils');
 
-/** @param {StructureSpawn} spawn **/
-module.exports = function(spawn) {
-    utils.debug(
-        "[spawn.renew_creep]" +
-        " spawn: " + spawn.name
-    );
-
-    if (!spawn.memory.renewList || spawn.memory.renewList.length == 0) {
-        return undefined
-    }
-
-    var creep = Game.getObjectById(spawn.memory.renewList[0]);
-    if (!creep) {
-        spawn.memory.renewList.shift();
-        return ERR_INVALID_TARGET
-    }
-
-    utils.debug(
-        "[spawn.renew_creep]" +
-        " spawn: " + spawn.name +
-        ", creep: " + creep.name
-    )
-    spawn.callCreepToRenew(creep);
-
-    if (creep.ticksToLive > 1400) {
-        spawn.removeCreepFromRenewList(creep);
-    }
-
-}
-
 StructureSpawn.prototype.processRenewList = function() {
     utils.debug(
         "[spawn.processRenewList] " +
