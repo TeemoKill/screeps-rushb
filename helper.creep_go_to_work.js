@@ -5,6 +5,8 @@ const roleConstructor = require('role.constructor');
 
 const globalAddToRenewList = require('global.add_to_renew_list');
 
+const utils = require('utils');
+
 const { isNull, isUndefined } = require('lodash');
 
 /** @param {Creep} creep **/
@@ -26,12 +28,12 @@ module.exports = function (creep) {
     if (creep.memory.renew) {
         renewSite = Game.getObjectById(creep.memory.renewSiteID);
         if (renewSite) {
-            console.log(
+            utils.debug(
                 "creep gonna renew: " + creep.name +
                 ", renew site: " + renewSite.name
             )
             if (renewSite.renewCreep(creep) == ERR_NOT_IN_RANGE) {
-                console.log(
+                utils.debug(
                     "not in renew range, creep: " + creep.name
                 )
                 creep.moveTo(renewSite);
@@ -67,9 +69,10 @@ module.exports = function (creep) {
             roleConstructor.run(creep);
             break;
         default:
-            console.log(
-                "Unknown role: " + creep.memory.role +
-                ", creep: " + creep.name
+            utils.error(
+                "[helper.creep_go_to_work] " +
+                "creep: " + creep.name +
+                ", Unknown role: " + creep.memory.role
             );
             break;
     }

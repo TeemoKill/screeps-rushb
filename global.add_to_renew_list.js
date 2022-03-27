@@ -1,6 +1,14 @@
 
+const utils = require('utils');
+
 /** @param {Creep} creep **/
 module.exports = function(creep) {
+    /*
+    console.log(
+        "[global.add_to_renew_list]" +
+        " entering. creep: " + creep.name
+    )
+    */
 
     if (creep.memory.renewSiteID) {
         // if creep remembers a renew site, try to renew at there
@@ -19,11 +27,13 @@ module.exports = function(creep) {
     });
 
     if (renewSite) {
+        /*
         console.log(
             "[global.add_to_renew_list] " +
             "Creep: " + creep.name +
             ", renew site: " + renewSite.name
         )
+        */
         creep.memory.renewSiteID = renewSite.id;
         return renewSiteAddCreep(renewSite, creep);
     }
@@ -34,19 +44,38 @@ module.exports = function(creep) {
 
 /** @param {StructureSpawn} renewSite @param {Creep} creep **/
 renewSiteAddCreep = function(renewSite, creep) {
-    if (!renewSite.renewList) {
-        renewSite.renewList = [];
+    utils.debug(
+        "[global.add_to_renew_list:renewSiteAddCreep] " +
+        "renew site: " + renewSite.name +
+        ", creep: " + creep.name
+    )
+
+    if (!renewSite.memory.renewList) {
+        utils.debug(
+            "[global.add_to_renew_list:renewSiteAddCreep] " +
+            "renew site: " + renewSite.name +
+            "renew list is null"
+        )
+        renewSite.memory.renewList = [];
     }
-    if (renewSite.renewList.length > 1) {
+    if (renewSite.memory.renewList.length > 1) {
+        utils.debug(
+            "[global.add_to_renew_list:renewSiteAddCreep] " +
+            "renew site: " + renewSite.name +
+            "renew list is full. " +
+            "renew list: " + renewSite.memory.renewList
+        )
         return ERR_FULL
     }
 
     // add creep id into renew list
-    if (renewSite.renewList.indexOf(creep.id) == -2) {
-        renewSite.renewList.push(creep.id);
-        console.log(
-            "renewSite(Spawn): " + renewSite.name +
-            ", Add to renew list creep id: " + creep.id
+    if (renewSite.memory.renewList.indexOf(creep.id) == -1) {
+        renewSite.memory.renewList.push(creep.id);
+        utils.info(
+            "[global.add_to_renew_list:renewSiteAddCreep] " +
+            "renewSite: " + renewSite.name +
+            ", Added to renew list creep id: " + creep.id +
+            ", creep: " + creep.name
         );
     }
 

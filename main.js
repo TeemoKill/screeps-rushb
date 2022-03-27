@@ -7,15 +7,21 @@ const creepGoToWork = require('helper.creep_go_to_work');
 const spawnRenewCreep = require('spawn.renew_creep');
 
 const structureTower = require('structure.tower');
+const utils = require('./utils');
 
 var sn = 30;
 
 global.data = null;
 global.creeps = null;
+global.debug = false;
 
 module.exports.loop = function () {
     const DATA = data();
     global.data = DATA;
+
+    if (Game.time%500 == 0) {
+        recycleDeadCreepMemory();
+    }
     
     const harvesters = _.filter(Game.creeps, {memory: {role: global.types.harvester}});
     const upgraders = _.filter(Game.creeps, {memory: {role: global.types.upgrader}});
@@ -78,7 +84,7 @@ scheduleSpawnTasks = function() {
                     else if (global.creeps.transferers.length < 4) {
                         createCreep(spawn, global.types.transferer);
                     }
-                    else if (global.creeps.upgraders.length < 2) {
+                    else if (global.creeps.upgraders.length < 5) {
                         createCreep(spawn, global.types.upgrader);
                     }
                     else if (global.creeps.constructors.length < 6) {
@@ -90,4 +96,15 @@ scheduleSpawnTasks = function() {
             spawnRenewCreep(spawn);
         });
     });
+}
+
+recycleDeadCreepMemory = function() {
+    for (var name in Memory.creeps) {
+        if (!Game.creeps[name]) {
+            delete Memory.creeps[name];
+            utils.info(
+                "[recycleDeadCreepMemory] deleted creep memory: " + name,
+            )
+        }
+    }
 }

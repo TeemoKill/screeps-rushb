@@ -24,6 +24,8 @@ global.bodyPartCost = {
     CLAIM: 600,
 }
 
+
+
 /** @param {Number} role @param {Number} availableEnergy */
 module.exports = function (role, availableEnergy) {
     var body;
@@ -72,22 +74,36 @@ makeBody = function (bodyStr) {
 makeBody_Harvester = function (availableEnergy) {
     var body = [];
 
+    var moveCount = 0;
+    var carryCount = 0;
+    var workCount = 0;
+
     // at least give a move part
     if (availableEnergy >= global.bodyPartCost.MOVE) {
-        body.push(MOVE);
+        moveCount += 1;
         availableEnergy -= global.bodyPartCost.MOVE;
     }
 
     // give a necessary carry part
     if (availableEnergy >= global.bodyPartCost.CARRY) {
-        body.push(CARRY);
+        carryCount += 1;
         availableEnergy -= global.bodyPartCost.CARRY;
     }
 
     // use all the rest energy for work part
     while (availableEnergy >= global.bodyPartCost.WORK) {
-        body.push(WORK);
+        workCount += 1;
         availableEnergy -= global.bodyPartCost.WORK;
+    }
+
+    for (var i = 0; i < workCount; i++) {
+        body.push(WORK);
+    }
+    for (var i = 0; i < carryCount; i++) {
+        body.push(CARRY);
+    }
+    for (var i = 0; i < moveCount; i++) {
+        body.push(MOVE);
     }
 
     return body;
@@ -102,22 +118,36 @@ makeBody_Transferer = function (availableEnergy) {
 
     carryPartCount = Math.floor((availableEnergy-equivCost_Work) / equivCost_Carry);
 
+    var moveCount = 0;
+    var carryCount = 0;
+    var workCount = 0;
+
     // transferer only needs one necessary work part
     if (availableEnergy >= global.bodyPartCost.WORK) {
-        body.push(WORK);
+        workCount++;
         availableEnergy -= global.bodyPartCost.WORK;
     }
 
     // put carry parts
     for (var i = 0; i < carryPartCount; i++) {
-        body.push(CARRY);
+        carryCount++;
         availableEnergy -= global.bodyPartCost.CARRY;
     }
 
     // use all the rest energy for move parts
     while (availableEnergy >= global.bodyPartCost.MOVE) {
-        body.push(MOVE);
+        moveCount++;
         availableEnergy -= global.bodyPartCost.MOVE;
+    }
+
+    for (var i = 0; i < workCount; i++) {
+        body.push(WORK);
+    }
+    for (var i = 0; i < carryCount; i++) {
+        body.push(CARRY);
+    }
+    for (var i = 0; i < moveCount; i++) {
+        body.push(MOVE);
     }
 
     return body;
@@ -133,12 +163,14 @@ makeBody_Upgrader = function (availableEnergy) {
     equivCost_Work = global.bodyPartCost.WORK + global.bodyPartCost.MOVE/2;
     movablePartCount = 0;
 
-    workPartCount = Math.max(
+    var workCount = Math.max(
         Math.floor(availableEnergy / (3*equivCost_Work)), 1
     );
+    var moveCount = 0;
+    var carryCount = 0;
 
     // put work parts
-    for (var i = 0; i < workPartCount; i++) {
+    for (var i = 0; i < workCount; i++) {
         body.push(WORK);
         availableEnergy -= global.bodyPartCost.WORK;
         movablePartCount -= 1;
@@ -146,16 +178,23 @@ makeBody_Upgrader = function (availableEnergy) {
 
     // put move parts
     while (availableEnergy >= global.bodyPartCost.MOVE) {
-        body.push(MOVE);
+        moveCount++;
         availableEnergy -= global.bodyPartCost.MOVE;
         // each move part can move 2 other parts
         movablePartCount += 2;
         // put carry parts while movability is enough and have energy
         while (movablePartCount > 0 && availableEnergy >= global.bodyPartCost.CARRY) {
-            body.push(CARRY);
+            carryCount++;
             availableEnergy -= global.bodyPartCost.CARRY;
             movablePartCount -= 1;
         }
+    }
+
+    for (var i = 0; i < carryCount; i++) {
+        body.push(CARRY);
+    }
+    for (var i = 0; i < moveCount; i++) {
+        body.push(MOVE);
     }
 
     return body;
@@ -169,10 +208,24 @@ makeBody_Constructor = function (availableEnergy) {
     partGroupCost = global.bodyPartCost.MOVE + global.bodyPartCost.WORK + global.bodyPartCost.CARRY;
     partGroupCount = Math.floor(availableEnergy / partGroupCost);
 
+    var moveCount = 0;
+    var carryCount = 0;
+    var workCount = 0;
+
     for (var i = 0; i < partGroupCount; i++) {
-        body.push(MOVE);
+        moveCount++;
+        workCount++;
+        carryCount++;
+    }
+
+    for (var i = 0; i < workCount; i++) {
         body.push(WORK);
+    }
+    for (var i = 0; i < carryCount; i++) {
         body.push(CARRY);
+    }
+    for (var i = 0; i < moveCount; i++) {
+        body.push(MOVE);
     }
 
     return body;

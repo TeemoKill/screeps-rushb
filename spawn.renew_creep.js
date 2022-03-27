@@ -1,12 +1,12 @@
 
+const utils = require('utils');
+
 /** @param {StructureSpawn} spawn **/
 module.exports = function(spawn) {
-    /*
-    console.log(
+    utils.debug(
         "[spawn.renew_creep]" +
         " spawn: " + spawn.name
     );
-    */
 
     if (!spawn.memory.renewList || spawn.memory.renewList.length == 0) {
         return undefined
@@ -18,7 +18,12 @@ module.exports = function(spawn) {
         return ERR_INVALID_TARGET
     }
 
-    callCreepToRenew(creep);
+    utils.debug(
+        "[spawn.renew_creep]" +
+        " spawn: " + spawn.name +
+        ", creep: " + creep.name
+    )
+    callCreepToRenew(spawn, creep);
 
     if (creep.ticksToLive > 1400) {
         removeCreepFromRenewList(spawn, creep);
@@ -27,17 +32,27 @@ module.exports = function(spawn) {
 }
 
 /** @param {StructureSpawn} renewSite @param {Creep} creep */
-callCreepToRenew = function(renewSite, creep) {
-    creep.memory.renew = 1;
+function callCreepToRenew(renewSite, creep) {
+    utils.debug(
+        "[spawn.renew_creep:callCreepToRenew] " +
+        "renew site: " + renewSite.name +
+        ", call renew creep: " + creep.name
+    )
+    creep.memory.renew = true;
     return undefined
 }
 
-/** @param {StructureSpawn} spawn @param {Creep} creep */
+/** @param {StructureSpawn} renewSite @param {Creep} creep */
 removeCreepFromRenewList = function(renewSite, creep) {
+    utils.debug(
+        "[spawn.renew_creep:removeCreepFromRenewList] " +
+        "renew site: " + renewSite.name +
+        ", remove creep: " + creep.name
+    )
     creep.memory.renew = 0;
     creep.memory.renewSiteID = null;
 
-    spawn.memory.renewList.shift();
+    renewSite.memory.renewList.shift();
 
     return undefined
 }

@@ -9,7 +9,7 @@ module.exports = function (spawn, role) {
     if (isUndefined(spawn.Spawning)) {
         console.log(spawn.name + ' create_creep, role: ' + global.roleName[role]);
         console.log(spawn + role);
-        var creepBody = body(role, spawn.store.getCapacity(RESOURCE_ENERGY));
+        var creepBody = body(role, spawn.room.energyAvailable);
         console.log(creepBody);
         var sn = Math.ceil(Math.random() * 10000);
         spawn.spawnCreep(creepBody, global.roleName[role] + sn, {
