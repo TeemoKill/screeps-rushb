@@ -2,6 +2,9 @@ const roleHarvester = require('role.harvester');
 const roleTransferer = require('role.transferer');
 const roleUpgrader = require('role.upgrader');
 const roleConstructor = require('role.constructor');
+
+const globalAddToRenewList = require('global.add_to_renew_list');
+
 const { isNull, isUndefined } = require('lodash');
 
 /** @param {Creep} creep **/
@@ -9,10 +12,7 @@ module.exports = function (creep) {
     if (creep.ticksToLive < 300) {
         // creep.say('Help Help Help');
         creep.say('need renew');
-        creep.memory.renew = 1;
-    }
-    else if (creep.ticksToLive > 1400) {
-        creep.memory.renew = 0;
+        globalAddToRenewList(creep);
     }
 
     if (creep.hits < creep.hitsMax) {
@@ -24,26 +24,19 @@ module.exports = function (creep) {
     }
 
     if (creep.memory.renew) {
-        var spawn = creep.pos.findClosestByPath(FIND_MY_SPAWNS);
-        // console.log("Creep: " + creep.memory["Name"] + "Spawn: " + spawn);
-        if (isUndefined(spawn) || isNull(spawn)) {
-            // can not find path to spawn, 
-            // may indicates the creep is stuck by others
-            // then just stay and wait
-            return;
-        }
-        // console.log("Spawn resource: " + spawn.store[RESOURCE_ENERGY]);
-        if (spawn.store[RESOURCE_ENERGY] > 30) {
-            creep.moveTo(spawn);
-            // if (isNull(spawn.Spawning)) {
-            //     spawn.renewCreep(creep);
-            //     return
-            // }
-            spawn.renewCreep(creep);
-            return;
-        }
-        else {
-            creep.say('spawn no energy');
+        renewSite = Game.getObjectById(creep.memory.renewSiteID);
+        if (renewSite) {
+            console.log(
+                "creep gonna renew: " + creep.name +
+                ", renew site: " + renewSite.name
+            )
+            if (renewSite.renewCreep(creep) == ERR_NOT_IN_RANGE) {
+                console.log(
+                    "not in renew range, creep: " + creep.name
+                )
+                creep.moveTo(renewSite);
+            }
+            return undefined;
         }
     }
         

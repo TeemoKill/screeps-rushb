@@ -125,34 +125,37 @@ makeBody_Transferer = function (availableEnergy) {
 
 /** @param {Number} availableEnergy */
 makeBody_Upgrader = function (availableEnergy) {
-    var body = [];
+   var body = [];
 
     // one move part can carry 2 other parts
-    // we need about 2/3 number of carry parts
-    // we need about 1/3 number of work parts
-    // and need ceil(parts_number / 2) move parts to make it balanced
-    equivCost_Carry = global.bodyPartCost.CARRY + global.bodyPartCost.MOVE/2;
+    // we need work:carry ratio 1/2, but at least one work part
+    // the number of parts not exceeding 2 times move parts
     equivCost_Work = global.bodyPartCost.WORK + global.bodyPartCost.MOVE/2;
+    movablePartCount = 0;
 
-    carryPartCount = Math.floor((2*availableEnergy) / (3*equivCost_Carry));
-    workPartCount = Math.floor(availableEnergy / (3*equivCost_Work));
-
-    // put carry parts
-    for (var i = 0; i < carryPartCount; i++) {
-        body.push(CARRY);
-        availableEnergy -= global.bodyPartCost.CARRY;
-    }
+    workPartCount = Math.max(
+        Math.floor(availableEnergy / (3*equivCost_Work)), 1
+    );
 
     // put work parts
     for (var i = 0; i < workPartCount; i++) {
         body.push(WORK);
         availableEnergy -= global.bodyPartCost.WORK;
+        movablePartCount -= 1;
     }
 
-    // use all the rest energy for move parts
+    // put move parts
     while (availableEnergy >= global.bodyPartCost.MOVE) {
         body.push(MOVE);
         availableEnergy -= global.bodyPartCost.MOVE;
+        // each move part can move 2 other parts
+        movablePartCount += 2;
+        // put carry parts while movability is enough and have energy
+        while (movablePartCount > 0 && availableEnergy >= global.bodyPartCost.CARRY) {
+            body.push(CARRY);
+            availableEnergy -= global.bodyPartCost.CARRY;
+            movablePartCount -= 1;
+        }
     }
 
     return body;

@@ -19,14 +19,15 @@ var roleConstructor = {
 			switch (creepRecharge(creep)) {
 				// no error, just return
 				case undefined:
-					return
+					return undefined;
 				// creep can not reach any container to recharge
 				case ERR_NOT_IN_RANGE:
 					// quite urgenet, let the constructor creep go to harvest by itself first
-					creepHarvest(creep);
+					return creepHarvest(creep);
+				default:
+					return ERR_NOT_ENOUGH_ENERGY;
 			}
-	    }
-	    else {
+	    } else {
 			var destination = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, 
 				{
 					filter: (structure) => {

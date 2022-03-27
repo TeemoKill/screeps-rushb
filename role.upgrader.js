@@ -1,3 +1,6 @@
+
+const creepRecharge = require('creeplife.recharge');
+
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
@@ -11,32 +14,16 @@ var roleUpgrader = {
         }
 
 	    if (creep.memory.recharge) {
-			var target = creep.pos.findClosestByPath(FIND_STRUCTURES, 
-				{
-					filter: (structure) => {
-						return (structure.structureType == STRUCTURE_CONTAINER) &&
-							structure.store[RESOURCE_ENERGY] > 0;
-					}
-				}
-            );
-            if (!target) {
-				target = creep.pos.findClosestByPath(FIND_STRUCTURES, 
-					{
-						filter: (structure) => {
-							return (structure.structureType == STRUCTURE_EXTENSION ||
-								structure.structureType == STRUCTURE_SPAWN) &&
-								structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-						}
-					}
-				);
+            switch (creepRecharge(creep)) {
+                case undefined:
+                    // no error, just return
+                    return undefined;
+                case ERR_NOT_IN_RANGE:
+                    return ERR_NOT_ENOUGH_ENERGY;
+                default:
+                    return ERR_NOT_ENOUGH_ENERGY;
             }
-            if (target) {
-                if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
-            }
-	    }
-        else {
+	    } else {
             if (creep.room.controller.level < 3) {
                 if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});

@@ -13,7 +13,7 @@ var roleHarvester = {
         }
         
 	    if (creep.memory.recharge) {
-            creepHarvest(creep);
+            return creepHarvest(creep);
         }
 
         // cold start stage, if can not find any built container, harvesters lend a hand on building
