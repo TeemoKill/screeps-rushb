@@ -1,13 +1,12 @@
 
 require('spawn.renew_creep');
 
+require('structure.tower');
 
 const data = require('helper.data');
 
 const createCreep = require('helper.create_creep');
 const creepGoToWork = require('helper.creep_go_to_work');
-
-const structureTower = require('structure.tower');
 
 const utils = require('utils');
 
@@ -57,7 +56,7 @@ module.exports.loop = function () {
     });
 
     towers.forEach(tower => {
-        structureTower.work(tower);
+        tower.work();
     });
 }
 

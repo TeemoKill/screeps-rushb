@@ -1,3 +1,4 @@
+
 const findMinStructure = require('helper.find_min_structure');
 const creepRecharge = require('creeplife.recharge');
 const creepHarvest = require('creeplife.harvest');
