@@ -1,5 +1,5 @@
 
-module.exports = function(creep) {
+export const creepRecharge = function(creep) {
     // find closest container to charge energy
     var rechargePort = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: (s) => {

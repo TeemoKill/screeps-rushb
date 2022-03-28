@@ -1,5 +1,5 @@
 
-require('creeplife.store_energy');
+import './store_energy'
 
 Creep.prototype.creeplifeTransfer = function() {
     if (this.creeplifeStoreEnergy(global.filters.extentionOrSpawnNotFull) == OK) {

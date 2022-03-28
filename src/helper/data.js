@@ -1,6 +1,7 @@
 // todo: army data
-var find_min_structure = require('helper.find_min_structure');
-module.exports = function () {
+import { findMinStructure } from './find_min_structure'
+
+export const data = function () {
 
     var myRooms   = [];
     var nearRooms = [];
@@ -48,7 +49,7 @@ module.exports = function () {
     for (var i in Game.rooms) {
         if (Game.rooms[i].controller != undefined && Game.rooms[i].controller.my) {
             myRooms.push(Game.rooms[i]);
-            wallsNeedBuild[i] = find_min_structure(Game.rooms[i]);
+            wallsNeedBuild[i] = findMinStructure(Game.rooms[i]);
             if (Game.rooms[i].storage!== undefined) {
                 myEnergy[i] = Game.rooms[i].storage.store.energy;
                 if (myEnergy[i] < 100000 && i!='E26N12' && i!='E28N17') {

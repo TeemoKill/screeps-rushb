@@ -1,9 +1,9 @@
 
-require('creeplife.transfer')
-require('creeplife.sweep')
-require('creeplife.withdraw_energy')
+import '../behaviours/transfer'
+import '../behaviours/sweep'
+import '../behaviours/withdraw_energy'
 
-var roleTransferer = {
+export const roleTransferer = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -29,5 +29,3 @@ var roleTransferer = {
         }
 	}
 };
-
-module.exports = roleTransferer;

@@ -32,7 +32,7 @@ global.makeBodyCache = {
 };
 
 /** @param {Number} role @param {Number} availableEnergy */
-module.exports = function (role, availableEnergy) {
+export const body = function (role, availableEnergy) {
     var body;
     switch (role) {
         case global.types.harvester:
@@ -76,7 +76,7 @@ makeBody = function (bodyStr) {
 */
 
 /** @param {Number} availableEnergy */
-makeBody_Harvester = function (availableEnergy) {
+const makeBody_Harvester = function (availableEnergy) {
     // check cache
     var cache = global.makeBodyCache.harvester;
     if (cache[availableEnergy]) {
@@ -125,7 +125,7 @@ makeBody_Harvester = function (availableEnergy) {
 }
 
 /** @param {Number} availableEnergy */
-makeBody_Transferer = function (availableEnergy) {
+const makeBody_Transferer = function (availableEnergy) {
     // check cache
     var cache = global.makeBodyCache.transferer;
     if (cache[availableEnergy]) {
@@ -138,10 +138,10 @@ makeBody_Transferer = function (availableEnergy) {
 
     var body = [];
 
-    equivCost_Carry = global.bodyPartCost.CARRY + global.bodyPartCost.MOVE/2;
-    equivCost_Work = global.bodyPartCost.WORK + global.bodyPartCost.MOVE/2;
+    var equivCost_Carry = global.bodyPartCost.CARRY + global.bodyPartCost.MOVE/2;
+    var equivCost_Work = global.bodyPartCost.WORK + global.bodyPartCost.MOVE/2;
 
-    carryPartCount = Math.floor((availableEnergy-equivCost_Work) / equivCost_Carry);
+    var carryPartCount = Math.floor((availableEnergy-equivCost_Work) / equivCost_Carry);
 
     var moveCount = 0;
     var carryCount = 0;
@@ -179,7 +179,7 @@ makeBody_Transferer = function (availableEnergy) {
 }
 
 /** @param {Number} availableEnergy */
-makeBody_Upgrader = function (availableEnergy) {
+const makeBody_Upgrader = function (availableEnergy) {
     // check cache
     var cache = global.makeBodyCache.upgrader;
     if (cache[availableEnergy]) {
@@ -195,8 +195,8 @@ makeBody_Upgrader = function (availableEnergy) {
     // one move part can carry 2 other parts
     // we need work:carry ratio 1/2, but at least one work part
     // the number of parts not exceeding 2 times move parts
-    equivCost_Work = global.bodyPartCost.WORK + global.bodyPartCost.MOVE/2;
-    movablePartCount = 0;
+    var equivCost_Work = global.bodyPartCost.WORK + global.bodyPartCost.MOVE/2;
+    var movablePartCount = 0;
 
     var workCount = Math.max(
         Math.floor(availableEnergy / (3*equivCost_Work)), 1
@@ -236,7 +236,7 @@ makeBody_Upgrader = function (availableEnergy) {
 }
 
 /** @param {Number} availableEnergy */
-makeBody_Constructor = function (availableEnergy) {
+const makeBody_Constructor = function (availableEnergy) {
     // check cache
     var cache = global.makeBodyCache.constructor;
     if (cache[availableEnergy]) {
@@ -250,8 +250,8 @@ makeBody_Constructor = function (availableEnergy) {
     var body = [];
 
     // constructor needs balanced abilities
-    partGroupCost = global.bodyPartCost.MOVE + global.bodyPartCost.WORK + global.bodyPartCost.CARRY;
-    partGroupCount = Math.floor(availableEnergy / partGroupCost);
+    var partGroupCost = global.bodyPartCost.MOVE + global.bodyPartCost.WORK + global.bodyPartCost.CARRY;
+    var partGroupCount = Math.floor(availableEnergy / partGroupCost);
 
     var moveCount = 0;
     var carryCount = 0;

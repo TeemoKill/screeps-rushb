@@ -1,7 +1,7 @@
 /*
  * find the wall / rampart to repair
  */
-module.exports = function (room) {
+export const findMinStructure = function (room) {
     var min = null;
 
     var structures = room.find(FIND_STRUCTURES, {

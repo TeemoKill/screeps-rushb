@@ -1,15 +1,14 @@
 
-require('creeplife.require_renew');
+import './require_renew'
 
-const roleTransferer = require('role.transferer');
-const roleUpgrader = require('role.upgrader');
-const roleConstructor = require('role.constructor');
+import { roleHarvester } from '../role/harvester';
+import { roleTransferer } from '../role/transferer';
+import { roleUpgrader } from '../role/upgrader';
+import { roleConstructor } from '../role/constructor';
 
 const utils = require('utils');
 
 const { isNull, isUndefined } = require('lodash');
-
-const roleHarvester = require('role.harvester');
 
 Creep.prototype.goToWork = function() {
     /*

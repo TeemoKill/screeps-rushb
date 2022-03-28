@@ -1,10 +1,10 @@
 
-require('creeplife.harvest');
+import '../behaviours/harvest'
 
-const findMinStructure = require('helper.find_min_structure');
-const creepRecharge = require('creeplife.recharge');
+import { findMinStructure } from '../helper/find_min_structure'
+import { creepRecharge } from '../behaviours/recharge'
 
-var roleConstructor = {
+export const roleConstructor = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -88,5 +88,3 @@ var roleConstructor = {
 	    }
 	}
 };
-
-module.exports = roleConstructor;

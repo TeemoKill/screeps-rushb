@@ -1,8 +1,8 @@
 
-require('creeplife.harvest');
-require('creeplife.store_energy')
+import '../behaviours/harvest'
+import '../behaviours/store_energy'
 
-var roleHarvester = {
+export const roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
@@ -53,5 +53,3 @@ var roleHarvester = {
         }
     }
 };
-
-module.exports = roleHarvester;

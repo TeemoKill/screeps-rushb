@@ -1,7 +1,7 @@
 
 var tools = require('orch.tools');
 
-var taskOrchestrator = {
+export const taskOrchestrator = {
 
     availableTasks: {
         spawnCreep: require('orch.task.spawnCreep'),
@@ -62,5 +62,3 @@ var taskOrchestrator = {
 
 // do init upon module load
 taskOrchestrator.init();
-
-module.exports = taskOrchestrator;

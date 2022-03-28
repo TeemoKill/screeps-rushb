@@ -1,8 +1,9 @@
 
-const body = require('helper.body');
-const { isNull, isUndefined } = require('lodash');
+import { body } from './body';
 
-module.exports = function (spawn, role) {
+import { isNull, isUndefined } from 'lodash';
+
+export const createCreep = function (spawn, role) {
     // console.log(isUndefined(spawn.Spawning));
     // console.log(spawn.Spawning);
 

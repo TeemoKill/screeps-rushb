@@ -1,5 +1,5 @@
 
-var utils = {
+export const utils = {
     debug: function(...data) {
         if (global.debug) {
             console.log(...data);
@@ -14,5 +14,3 @@ var utils = {
         console.log(...data);
     },
 }
-
-module.exports = utils;
