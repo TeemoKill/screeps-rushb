@@ -40,7 +40,7 @@ var roleHarvester = {
             } // if no construct site found, harvester go back to store energy
         }
 
-        if (creep.creeplifeStoreEnergy(global.filters.conteinerNotFull) == OK) {
+        if (creep.creeplifeStoreEnergy(global.filters.containerNotFull) == OK) {
             return undefined;
         } 
 

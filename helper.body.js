@@ -24,6 +24,13 @@ global.bodyPartCost = {
     CLAIM: 600,
 }
 
+global.makeBodyCache = {
+    harvester: {},
+    transferer: {},
+    upgrader: {},
+    constructor: {},
+};
+
 /** @param {Number} role @param {Number} availableEnergy */
 module.exports = function (role, availableEnergy) {
     var body;
@@ -51,7 +58,7 @@ module.exports = function (role, availableEnergy) {
     return body;
 }
 
-/** @param {Array} bodyStr */
+/*
 makeBody = function (bodyStr) {
     var body = [];
 
@@ -65,11 +72,21 @@ makeBody = function (bodyStr) {
     }
 
     return body;
-    
 }
+*/
 
 /** @param {Number} availableEnergy */
 makeBody_Harvester = function (availableEnergy) {
+    // check cache
+    var cache = global.makeBodyCache.harvester;
+    if (cache[availableEnergy]) {
+        console.log(
+            "[helper.body.harvester] " +
+            "cache hit: " + availableEnergy
+        )
+        return cache[availableEnergy];
+    }
+
     var body = [];
 
     var moveCount = 0;
@@ -104,11 +121,21 @@ makeBody_Harvester = function (availableEnergy) {
         body.push(MOVE);
     }
 
-    return body;
+    return cache[availableEnergy] = body;
 }
 
 /** @param {Number} availableEnergy */
 makeBody_Transferer = function (availableEnergy) {
+    // check cache
+    var cache = global.makeBodyCache.transferer;
+    if (cache[availableEnergy]) {
+        console.log(
+            "[helper.body.transferer] " +
+            "cache hit: " + availableEnergy
+        )
+        return cache[availableEnergy];
+    }
+
     var body = [];
 
     equivCost_Carry = global.bodyPartCost.CARRY + global.bodyPartCost.MOVE/2;
@@ -148,12 +175,22 @@ makeBody_Transferer = function (availableEnergy) {
         body.push(MOVE);
     }
 
-    return body;
+    return cache[availableEnergy] = body;
 }
 
 /** @param {Number} availableEnergy */
 makeBody_Upgrader = function (availableEnergy) {
-   var body = [];
+    // check cache
+    var cache = global.makeBodyCache.upgrader;
+    if (cache[availableEnergy]) {
+        console.log(
+            "[helper.body.upgrader] " +
+            "cache hit: " + availableEnergy
+        )
+        return cache[availableEnergy];
+    }
+
+    var body = [];
 
     // one move part can carry 2 other parts
     // we need work:carry ratio 1/2, but at least one work part
@@ -195,11 +232,21 @@ makeBody_Upgrader = function (availableEnergy) {
         body.push(MOVE);
     }
 
-    return body;
+    return cache[availableEnergy] = body;
 }
 
 /** @param {Number} availableEnergy */
 makeBody_Constructor = function (availableEnergy) {
+    // check cache
+    var cache = global.makeBodyCache.constructor;
+    if (cache[availableEnergy]) {
+        console.log(
+            "[helper.body.constructor] " +
+            "cache hit: " + availableEnergy
+        )
+        return cache[availableEnergy];
+    }
+
     var body = [];
 
     // constructor needs balanced abilities
@@ -226,5 +273,5 @@ makeBody_Constructor = function (availableEnergy) {
         body.push(MOVE);
     }
 
-    return body;
+    return cache[availableEnergy] = body;
 }

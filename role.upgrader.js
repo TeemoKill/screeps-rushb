@@ -24,7 +24,7 @@ var roleUpgrader = {
                     return ERR_NOT_ENOUGH_ENERGY;
             }
 	    } else {
-            if (creep.room.controller.level < 4) {
+            if (creep.room.controller.level < 5) {
                 if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
                 }

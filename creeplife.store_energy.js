@@ -1,5 +1,5 @@
 
-/** @param {function(Structure)=>} filter*/
+/** @param {function(Structure)=>} filter */
 Creep.prototype.creeplifeStoreEnergy = function(filter) {
     var destination = this.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: filter,

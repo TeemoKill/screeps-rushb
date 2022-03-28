@@ -1,18 +1,20 @@
 
+require('creeplife.store_energy');
+
 Creep.prototype.creeplifeTransfer = function() {
     if (this.creeplifeStoreEnergy(global.filters.extentionOrSpawnNotFull) == OK) {
-        return undefined;
+        return OK;
     }
     if (this.creeplifeStoreEnergy(global.filters.towerNotFull) == OK) {
-        return undefined;
+        return OK;
+    }
+    if (this.creeplifeStoreEnergy(global.filters.storageNotFull) == OK) {
+        return OK;
+    }
+    // fall back
+    if (this.creeplifeStoreEnergy(global.filters.extentionOrSpawn) == OK) {
+        return OK;
     }
 
-    var destination = this.pos.findClosestByPath(FIND_STRUCTURES, {
-        filter: global.filters.extentionOrSpawn,
-    });
-    if (destination) {
-        if (this.transfer(destination, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            this.moveTo(destination);
-        }
-    }
+    return ERR_NOT_FOUND;
 }

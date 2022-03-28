@@ -3,8 +3,17 @@ if (!global.filters) {
     global.filters = {};
 }
 
-global.filters.conteinerNotFull = function(structure) {
+global.filters.containerNotFull = function(structure) {
     return structure.structureType == STRUCTURE_CONTAINER && structure.store.getFreeCapacity() > 0;
+}
+
+global.filters.containerNotEmpty = function(structure) {
+    return structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity() > 0;
+}
+
+global.filters.storageNotFull = function(structure) {
+    return structure.structureType == STRUCTURE_STORAGE && 
+    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
 }
 
 global.filters.extentionOrSpawn = function(structure) {

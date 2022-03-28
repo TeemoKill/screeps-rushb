@@ -1,7 +1,7 @@
 
 require('creeplife.transfer')
-
-const findMaxContainer = require('helper.find_max_container');
+require('creeplife.sweep')
+require('creeplife.withdraw_energy')
 
 var roleTransferer = {
 
@@ -14,26 +14,18 @@ var roleTransferer = {
             creep.memory.recharge = false;
             creep.say("⚡ store");
         }
-        
-	    if (creep.memory.recharge) {
-	        var target = findMaxContainer(creep.room);
-            if (!target) {
-                target = creep.pos.findClosestByPath(FIND_STRUCTURES, 
-                    {
-                        filter: (structure) => {
-                            return structure.structureType == STRUCTURE_CONTAINER;
-                        }
-                    }
-                );
+
+        if (creep.memory.recharge) {
+            if (creep.creeplifeSweep() == OK) {
+                return undefined;
             }
-            if (target) {
-                if (creep.withdraw(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
-                }
+            if (creep.creeplifeWithdrawEnergy(global.filters.containerNotEmpty, true) == OK) {
+                return undefined;
             }
-        }
-        else {
-            creep.creeplifeTransfer();
+        } else {
+            if (creep.creeplifeTransfer() == OK) {
+                return undefined;
+            }
         }
 	}
 };

@@ -12,10 +12,12 @@ const { isNull, isUndefined } = require('lodash');
 const roleHarvester = require('role.harvester');
 
 Creep.prototype.goToWork = function() {
+    /*
     if (this.ticksToLive < 300) {
         this.say('need renew');
         this.requireRenew();
     }
+    */
 
     if (this.hits < this.hitsMax) {
         this.say('Hurt Hurt');

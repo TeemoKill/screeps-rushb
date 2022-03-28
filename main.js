@@ -68,30 +68,22 @@ scheduleSpawnTasks = function() {
         spawns.forEach(spawn => {
 
             if (Game.time%10 == 0) {
-                // only try to create creep if room energy is full
-                if (room.energyAvailable == room.energyCapacityAvailable) {
-                    if (g.creeps.harvesters.length < 1) {
+                if (g.creeps.harvesters.length < 1) {
+                    createCreep(spawn, g.types.harvester);
+                } else if (g.creeps.constructors.length < 1) {
+                    createCreep(spawn, g.types.constructor);
+                } else if (g.creeps.transferers.length < 1) {
+                    createCreep(spawn, g.types.transferer);
+                } else if (g.creeps.upgraders.length < 1) {
+                    createCreep(spawn, g.types.upgrader);
+                } else if (room.energyAvailable == room.energyCapacityAvailable) {
+                    if (g.creeps.harvesters.length < 5) {
                         createCreep(spawn, g.types.harvester);
-                    }
-                    else if (g.creeps.constructors.length < 1) {
-                        createCreep(spawn, g.types.constructor);
-                    }
-                    else if (g.creeps.transferers.length < 1) {
+                    } else if (g.creeps.transferers.length < 3) {
                         createCreep(spawn, g.types.transferer);
-                    }
-                    else if (g.creeps.upgraders.length < 1) {
+                    } else if (g.creeps.upgraders.length < 3) {
                         createCreep(spawn, g.types.upgrader);
-                    }
-                    else if (g.creeps.harvesters.length < 5) {
-                        createCreep(spawn, g.types.harvester);
-                    }
-                    else if (g.creeps.transferers.length < 3) {
-                        createCreep(spawn, g.types.transferer);
-                    }
-                    else if (g.creeps.upgraders.length < 3) {
-                        createCreep(spawn, g.types.upgrader);
-                    }
-                    else if (g.creeps.constructors.length < 3) {
+                    } else if (g.creeps.constructors.length < 3) {
                         createCreep(spawn, g.types.constructor);
                     }
                 }
