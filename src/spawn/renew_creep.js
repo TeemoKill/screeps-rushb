@@ -1,5 +1,5 @@
 
-const utils = require('utils');
+import { utils } from '../utils'
 
 StructureSpawn.prototype.processRenewList = function() {
     utils.debug(

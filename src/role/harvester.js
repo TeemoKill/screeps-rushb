@@ -1,6 +1,9 @@
 
+import '../behaviours/build'
 import '../behaviours/harvest'
 import '../behaviours/store_energy'
+
+import { f } from '../global/filters'
 
 export const roleHarvester = {
 
@@ -25,19 +28,9 @@ export const roleHarvester = {
             }
         }); 
         if (!rechargePort) {
-            // if no container, harvester help to build
-            var constrSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, {
-                filter: (s) => {
-                    return s.structureType == STRUCTURE_CONTAINER;
-                }
-            });
-            if (constrSite) {
-                // find a constuct site, help build it
-                if(creep.build(constrSite) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(constrSite, {visualizePathStyle: {stroke: '#ffffff'}});
-                }
-                return
-            } // if no construct site found, harvester go back to store energy
+            if (creep.creeplifeBuild(f.container) == OK) {
+                return undefined;
+            }
         }
 
         if (creep.creeplifeStoreEnergy(global.filters.containerNotFull) == OK) {

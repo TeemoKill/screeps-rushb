@@ -3,6 +3,8 @@ import '../behaviours/transfer'
 import '../behaviours/sweep'
 import '../behaviours/withdraw_energy'
 
+import { f } from '../global/filters'
+
 export const roleTransferer = {
 
     /** @param {Creep} creep **/
@@ -19,7 +21,10 @@ export const roleTransferer = {
             if (creep.creeplifeSweep() == OK) {
                 return undefined;
             }
-            if (creep.creeplifeWithdrawEnergy(global.filters.containerNotEmpty, true) == OK) {
+            if (creep.creeplifeWithdrawEnergy(f.containerNotEmpty) == OK) {
+                return undefined;
+            }
+            if (creep.creeplifeWithdrawEnergy(f.storageNotEmpty) == OK) {
                 return undefined;
             }
         } else {

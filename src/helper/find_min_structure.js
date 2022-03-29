@@ -15,11 +15,9 @@ export const findMinStructure = function (room) {
     });
 
     if (structures.length) {
-        for (var i in structures ) {
-            if ( min == null || structures[i].hits < min.hits) {
-                min = structures[i];
-            }
-        }
+        min = structures.reduce(function(a, b) {
+            return a.hits < b.hits ? a : b;
+        });
     }
 
     return min;

@@ -1,8 +1,11 @@
 
+import '../behaviours/build'
 import '../behaviours/harvest'
 
 import { findMinStructure } from '../helper/find_min_structure'
-import { creepRecharge } from '../behaviours/recharge'
+import { creeplifeRecharge } from '../behaviours/recharge'
+
+import { f } from '../global/filters'
 
 export const roleConstructor = {
 
@@ -18,7 +21,7 @@ export const roleConstructor = {
 	    }
 
 	    if (creep.memory.recharge) {
-			switch (creepRecharge(creep)) {
+			switch (creeplifeRecharge(creep)) {
 				// no error, just return
 				case undefined:
 					return undefined;
@@ -30,59 +33,33 @@ export const roleConstructor = {
 					return ERR_NOT_ENOUGH_ENERGY;
 			}
 	    } else {
-			var destination = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, 
-				{
-					filter: (structure) => {
-						return structure.structureType == STRUCTURE_CONTAINER;
-					}
+			if (creep.creeplifeBuild(f.container) == OK) {
+				return undefined;
+			}
+			if (creep.creeplifeBuild(f.extention) == OK) {
+				return undefined;
+			}
+			if (creep.creeplifeBuild(f.all) == OK) {
+				return undefined;
+			}
+
+			var destination = findMinStructure(creep.room);
+            if (destination) {
+				if(creep.repair(destination) == ERR_NOT_IN_RANGE) {
+					creep.moveTo(destination, {visualizePathStyle: {stroke: '#ffffff'}});
 				}
-			);
-			if (!destination) {
-				destination = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES, 
+				// repair other structures by the way
+				var needRepair = creep.pos.findInRange(FIND_STRUCTURES, 2, 
 					{
 						filter: (structure) => {
-							return structure.structureType == STRUCTURE_EXTENSION;
+							return structure.hits < structure.hitsMax - 300;
 						}
 					}
 				);
-			}
-			if (!destination) {
-				destination = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
-			}
-			if (destination) {
-				creep.memory.mode = 'construct';
-			} 
-			else 
-			{
-				destination = findMinStructure(creep.room);
-				if (destination) {
-					creep.memory.mode = 'repair';
-				}
-			}
-            if (destination) {
-				if (creep.memory.mode == 'construct') {
-					if(creep.build(destination) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(destination, {visualizePathStyle: {stroke: '#ffffff'}});
-					}
-				}
-				else if (creep.memory.mode == 'repair') {
-					var needRepair = creep.pos.findInRange(FIND_STRUCTURES, 2, 
-						{
-							filter: (structure) => {
-								return structure.hits < structure.hitsMax - 300;
-							}
-						}
-					);
-					needRepair.forEach(structure => {
-						creep.repair(structure);
-					});
-					if(creep.repair(destination) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(destination, {visualizePathStyle: {stroke: '#ffffff'}});
-					}
-				}
-                
-			}
-			else{
+				needRepair.forEach(structure => {
+					creep.repair(structure);
+				});
+			} else {
 				creep.moveTo(Game.flags['ConstructorStation1'], {visualizePathStyle: {stroke: '#00ffaa'}});
 			}
 	    }

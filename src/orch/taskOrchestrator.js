@@ -1,10 +1,12 @@
 
-var tools = require('orch.tools');
+import { orchTools as tools } from './tools';
+
+import { spawnCreep } from './task/spawnCreep'
 
 export const taskOrchestrator = {
 
     availableTasks: {
-        spawnCreep: require('orch.task.spawnCreep'),
+        spawnCreep: spawnCreep,
     },
 
     init: function() {

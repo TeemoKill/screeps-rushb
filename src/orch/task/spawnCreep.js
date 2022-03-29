@@ -1,12 +1,12 @@
 
-var tools = require('orch.tools');
+import { orchTools as tools } from '../tools'
 
 if (!global.orchTask) {
     global.orchTask = {};
 }
 global.orchTask.spawnCreep = {};
 
-var spawnCreep = {
+export const spawnCreep = {
 
     taskType: null,
 
@@ -66,5 +66,3 @@ var spawnCreep = {
         return false;
     },
 }
-
-module.exports = spawnCreep;

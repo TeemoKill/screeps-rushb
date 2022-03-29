@@ -3,31 +3,50 @@ if (!global.filters) {
     global.filters = {};
 }
 
-global.filters.containerNotFull = function(structure) {
+export const f = global.filters
+
+f.all = function(structure) {
+    return true;
+}
+
+f.container = function(structure) {
+    return structure.structureType == STRUCTURE_CONTAINER;
+}
+
+f.containerNotFull = function(structure) {
     return structure.structureType == STRUCTURE_CONTAINER && structure.store.getFreeCapacity() > 0;
 }
 
-global.filters.containerNotEmpty = function(structure) {
+f.containerNotEmpty = function(structure) {
     return structure.structureType == STRUCTURE_CONTAINER && structure.store.getUsedCapacity() > 0;
 }
 
-global.filters.storageNotFull = function(structure) {
+f.storageNotFull = function(structure) {
     return structure.structureType == STRUCTURE_STORAGE && 
     structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
 }
 
-global.filters.extentionOrSpawn = function(structure) {
+f.storageNotEmpty = function(structure) {
+    return structure.structureType == STRUCTURE_STORAGE &&
+    structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0;
+}
+
+f.extention = function(structure) {
+    return structure.structureType == STRUCTURE_EXTENSION;
+}
+
+f.extentionOrSpawn = function(structure) {
     return structure.structureType == STRUCTURE_EXTENSION || 
     structure.structureType == STRUCTURE_SPAWN;
 }
 
-global.filters.extentionOrSpawnNotFull = function(structure) {
+f.extentionOrSpawnNotFull = function(structure) {
     return (structure.structureType == STRUCTURE_EXTENSION || 
         structure.structureType == STRUCTURE_SPAWN) && 
         structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
 }
 
-global.filters.towerNotFull = function(structure) {
+f.towerNotFull = function(structure) {
     return structure.structureType == STRUCTURE_TOWER && 
     structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
 }

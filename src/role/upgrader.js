@@ -1,5 +1,5 @@
 
-import { creepRecharge } from '../behaviours/recharge'
+import { creeplifeRecharge } from '../behaviours/recharge'
 
 export const roleUpgrader = {
 
@@ -14,7 +14,7 @@ export const roleUpgrader = {
         }
 
 	    if (creep.memory.recharge) {
-            switch (creepRecharge(creep)) {
+            switch (creeplifeRecharge(creep)) {
                 case undefined:
                     // no error, just return
                     return undefined;

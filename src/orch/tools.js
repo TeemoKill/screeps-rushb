@@ -1,7 +1,7 @@
 
-require('room.tasks');
+import '../room/tasks'
 
-var orchTools = {
+export const orchTools = {
 
     consts: {
         TASK_IDLE: 0,
@@ -197,5 +197,3 @@ var orchTools = {
         return ERR_NOT_FOUND;
     },
 };
-
-module.exports = orchTools;

@@ -6,7 +6,7 @@ import { roleTransferer } from '../role/transferer';
 import { roleUpgrader } from '../role/upgrader';
 import { roleConstructor } from '../role/constructor';
 
-const utils = require('utils');
+import { utils } from '../utils';
 
 const { isNull, isUndefined } = require('lodash');
 
